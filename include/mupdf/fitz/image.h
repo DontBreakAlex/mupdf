@@ -428,7 +428,7 @@ fz_pixmap *fz_load_jpx(fz_context *ctx, const unsigned char *data, size_t size, 
 */
 void opj_lock(fz_context *ctx);
 void opj_unlock(fz_context *ctx);
-
+static void set_opj_context(fz_context *ctx);
 
 /**
 	Exposed for CBZ.
