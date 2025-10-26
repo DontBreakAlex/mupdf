@@ -99,7 +99,7 @@ typedef struct
  * threading systems.
  */
 
-static fz_context *opj_secret = NULL;
+_Thread_local static fz_context *opj_secret = NULL;
 
 static void set_opj_context(fz_context *ctx)
 {
@@ -649,11 +649,11 @@ fz_load_jpx(fz_context *ctx, const unsigned char *data, size_t size, fz_colorspa
 
 	fz_try(ctx)
 	{
-		opj_lock(ctx);
+		set_opj_context(ctx);
 		pix = jpx_read_image(ctx, &state, data, size, defcs, 0);
 	}
 	fz_always(ctx)
-		opj_unlock(ctx);
+		set_opj_context(NULL);
 	fz_catch(ctx)
 		fz_rethrow(ctx);
 
@@ -667,11 +667,11 @@ fz_load_jpx_info(fz_context *ctx, const unsigned char *data, size_t size, int *w
 
 	fz_try(ctx)
 	{
-		opj_lock(ctx);
+		set_opj_context(ctx);
 		jpx_read_image(ctx, &state, data, size, defcs, 1);
 	}
 	fz_always(ctx)
-		opj_unlock(ctx);
+		set_opj_context(NULL);
 	fz_catch(ctx)
 		fz_rethrow(ctx);
 
